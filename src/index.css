@@ -1,0 +1,109 @@
+:root {
+  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #6c4ab6;
+  background: linear-gradient(to bottom, #a084ca, #f7f1ff);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #a084ca, #f7f1ff);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #6c4ab6;
+  font-weight: 600;
+  margin-bottom: 0.7em;
+}
+
+a {
+  font-weight: 500;
+  color: #a084ca;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #6c4ab6;
+}
+
+button {
+  border-radius: 8px;
+  border: none;
+  padding: 0.7em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #a084ca;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(160, 132, 202, 0.08);
+}
+button:hover {
+  background: #6c4ab6;
+}
+button:focus,
+button:focus-visible {
+  outline: 3px solid #a084ca44;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #a084ca;
+  border-radius: 6px;
+  outline: none;
+  font-size: 15px;
+  background: #f7f1ff;
+  color: #6c4ab6;
+  transition: border 0.2s;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+input:focus, textarea:focus {
+  border: 2px solid #6c4ab6;
+}
+
+.card, .box {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(160, 132, 202, 0.2);
+  padding: 32px 28px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.boxdash {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(160, 132, 202, 0.2);
+  padding: 32px 28px;
+  min-width: 320px;
+  display: flex;
+  align-items: center;
+  width: 1300px;
+}
+
+@media (max-width: 600px) {
+  .card, .box {
+    min-width: 90vw;
+    padding: 18px 6vw;
+  }
+}
