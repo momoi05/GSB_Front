@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
-const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
-    const [data, setData] = useState({
-        date: new Date().toISOString().split('T')[0],
-        merchant: '',
-        amount: '',
-        status: 'Pending',
-        description: '',
-        receipt: null
-      });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    // const modalRef = useRef(null);
-    // const fileInputRef = useRef(null);
-  
+const CreationModal = ({ isOpen, onClose, onSave }) => {
+  const [data, setData] = useState({
+    date: new Date().toISOString().split('T')[0],
+    merchant: '',
+    amount: '',
+    status: 'Pending',
+    description: '',
+    proof: null
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const modalRef = useRef(null);
+  const fileInputRef = useRef(null);
+
 
   useEffect(() => {
     if (!isOpen) {
@@ -23,7 +24,7 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
         amount: '',
         status: 'Pending',
         description: '',
-        receipt: null
+        proof: null
       });
       setIsSubmitting(false);
     }
@@ -58,11 +59,12 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    
+    console.log(name, value, type)
+
     if (type === 'file') {
       setData({
         ...data,
-        receipt: e.target.files[0] || null
+        proof: e.target.files[0] || null
       });
     } else {
       setData({
@@ -77,26 +79,49 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
     e.stopPropagation();
     setIsSubmitting(true);
 
-  try{
-    
-  const formData = new FormData();
-  formData.append(`proof`, data.proof);
-  formData.append(`metadata`, JSON.stringify({amount: data.amount, type: data.type, date: data.date, description: data.description}))
+    try {
 
-  const response = await fetch('http://localhost:3000/bills',{
-    method: 'POST',
-    body: formData
-  })
-  const billData = await response.json()
-  onSave(billData);
-  onClose();
-}catch (error){
-    console.error('Error saving bill:', error)
-}finally{
-    setIsSubmitting(false);
-}
+      const formData = new FormData();
+      formData.append('proof', data.proof);
+      console.log(data.proof)
+      formData.append('metadata', JSON.stringify({ amount: data.amount, type: data.type, status: data.status, date: data.date, description: data.description }))
+      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg3NTdiNWYwZmUwMGVhYjEyOTllZiIsInJvbGUiOiJ4eHh4IiwiZW1haWwiOiJzYWZkdTcwQGdtYWlsLmNvbSIsImlhdCI6MTc0NzcyOTg1MywiZXhwIjoxNzQ3ODE2MjUzfQ.JU_EfARNbA_YlY7zXh9Lfw7xY4c25VGsTXwSD737WkQ"
+      const response = await fetch('http://localhost:3000/bills', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      })
+      const billData = await response.json()
+      onSave(billData);
+      onClose();
+    } catch (error) {
+      console.error('Error saving bill:', error)
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-  
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setData({
+        ...data,
+        proof: e.dataTransfer.files[0]
+      });
+    }
+  };
+
+
+
   return (
     <div style={{
       position: "fixed",
@@ -150,7 +175,7 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
           <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
             Montant :
             <input
-            name="amount"
+              name="amount"
               type="number"
               value={data.amount}
               onChange={handleChange}
@@ -161,7 +186,7 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
           <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
             Date :
             <input
-            name= "date"
+              name="date"
               type="date"
               value={data.date}
               onChange={handleChange}
@@ -172,7 +197,7 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
           <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
             Description :
             <textarea
-            name="description"
+              name="description"
               value={data.description}
               onChange={handleChange}
               style={{ border: "2px solid #6c47b6", borderRadius: 4, background: "transparent", outline: "none", marginTop: 2, resize: "none" }}
@@ -180,21 +205,11 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
               required
             />
           </label>
-          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-            Status :
-            <input
-            name="status"
-              type="text"
-              value={data.status}
-              onChange={handleChange}
-              style={{ border: "none", borderBottom: "2px solid #6c47b6", background: "transparent", outline: "none", marginTop: 2 }}
-              required
-            />
-          </label>
+
           <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
             Type :
             <input
-            name="type"
+              name="type"
               type="text"
               value={data.type}
               onChange={handleChange}
@@ -202,23 +217,59 @@ const CreationModal = ({  isOpen, onClose, onSubmit, onSave }) => {
               required
             />
           </label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Receipt
+            </label>
+            <div
+              className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6"
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              <div className="space-y-1 text-center">
+
+                <div className="flex text-sm text-gray-600">
+                  <label
+                    htmlFor="file-upload"
+                    className="relative cursor-pointer rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500"
+                  >
+                    <span>Upload a file</span>
+                    <input
+                      id="file-upload"
+                      name="file-upload"
+                      type="file"
+                      className="sr-only"
+                      onChange={handleChange}
+                      ref={fileInputRef}
+                      accept="image/*,.pdf"
+                    />
+                  </label>
+                  <p className="pl-1">or drag and drop</p>
+                </div>
+                <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
+
+                {data.receipt && (
+                  <p className="text-sm text-blue-600 mt-2">
+                    {data.receipt.name}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
           <button type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onClose();
-          }} style={{
-            marginTop: 16,
-            background: "#8e44ad",
-            color: "white",
-            border: "none",
-            borderRadius: 8,
-            padding: "8px 0",
-            fontWeight: "bold",
-            fontSize: 16,
-            cursor: "pointer"
-          }}>
-            Ajouter la facture
+            disabled={isSubmitting}
+            style={{
+              marginTop: 16,
+              background: "#8e44ad",  
+              color: "white",
+              border: "none",
+              borderRadius: 8,
+              padding: "8px 0",
+              fontWeight: "bold",
+              fontSize: 16,
+              cursor: "pointer"
+            }}>
+             {isSubmitting ? 'Enregistrement...' : 'Ajouter la facture'}
           </button>
         </form>
       </div>

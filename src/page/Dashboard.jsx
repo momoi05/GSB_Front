@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [bills, setBills] = useState([]);
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg3ZTM3NTdjYjUyZjIzMzNlNjU4ZCIsInJvbGUiOiJjbGllbnQiLCJlbWFpbCI6ImxvbXAyM0BnbWFpbC5jb20iLCJpYXQiOjE3NDc2NDM0NTUsImV4cCI6MTc0NzcyOTg1NX0.1IlwFsPlANpieGxsErikRRJFG0OENXGTkm-2gkVzBjs"
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg3NTdiNWYwZmUwMGVhYjEyOTllZiIsInJvbGUiOiJ4eHh4IiwiZW1haWwiOiJzYWZkdTcwQGdtYWlsLmNvbSIsImlhdCI6MTc0NzcyOTg1MywiZXhwIjoxNzQ3ODE2MjUzfQ.JU_EfARNbA_YlY7zXh9Lfw7xY4c25VGsTXwSD737WkQ"
 
 useEffect(() =>{
 (async () => {
@@ -31,12 +31,11 @@ useEffect(() =>{
 
   // Exemple de callback pour la création
   const handleAddFacture = (facture) => {
-    // Ajoute la facture à ta liste (API ou state)
     setShowCreation(false);
-    // ...autres actions
+    setBills([...bills, facture]);
+  
   };
 
-  // Exemple d’ouverture du modal d’info
   const handleShowInfo = (data) => {
     setSelectedData(data);
     setShowInfo(true);
@@ -101,7 +100,7 @@ useEffect(() =>{
         {showCreation && (
         <CreationModal
         onClose={() => setShowCreation(false)}
-        onSubmit={handleAddFacture}
+        onSave={handleAddFacture}
       />
     )}
         <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 4px 24px rgba(160, 132, 202, 0.2)', padding: 24, width: 460, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
