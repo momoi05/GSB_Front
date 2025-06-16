@@ -1,31 +1,44 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 
-const CreationModal = ({ isOpen, onClose, onSave }) => {
+const CreationModal = forwardRef(({ isOpen, onClose, onSave }, ref) => {
   const [data, setData] = useState({
     date: new Date().toISOString().split('T')[0],
-    merchant: '',
+    type: '',
     amount: '',
-    status: 'Pending',
+    status: 'En cours',
     description: '',
     proof: null
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
   const modalRef = useRef(null);
   const fileInputRef = useRef(null);
+  const token = localStorage.getItem("token");
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!data.date) newErrors.date = 'La date est requise';
+    if (!data.type) newErrors.type = 'Le type est requis';
+    if (!data.amount) newErrors.amount = 'Le montant est requis';
+    if (!data.description) newErrors.description = 'La description est requise';
+    if (!data.proof) newErrors.proof = 'Le justificatif est requis';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     if (!isOpen) {
-      // Reset form when modal closes
       setData({
         date: new Date().toISOString().split('T')[0],
-        merchant: '',
+        type: '',
         amount: '',
-        status: 'Pending',
+        status: 'En cours',
         description: '',
         proof: null
       });
+      setErrors({});
       setIsSubmitting(false);
     }
   }, [isOpen]);
@@ -59,45 +72,60 @@ const CreationModal = ({ isOpen, onClose, onSave }) => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    console.log(name, value, type)
 
     if (type === 'file') {
       setData({
         ...data,
         proof: e.target.files[0] || null
       });
+      if (e.target.files[0]) {
+        setErrors(prev => ({ ...prev, proof: null }));
+      }
     } else {
       setData({
         ...data,
         [name]: value
       });
+      if (value) {
+        setErrors(prev => ({ ...prev, [name]: null }));
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-
       const formData = new FormData();
       formData.append('proof', data.proof);
-      console.log(data.proof)
-      formData.append('metadata', JSON.stringify({ amount: data.amount, type: data.type, status: data.status, date: data.date, description: data.description }))
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg3NTdiNWYwZmUwMGVhYjEyOTllZiIsInJvbGUiOiJ4eHh4IiwiZW1haWwiOiJzYWZkdTcwQGdtYWlsLmNvbSIsImlhdCI6MTc0NzcyOTg1MywiZXhwIjoxNzQ3ODE2MjUzfQ.JU_EfARNbA_YlY7zXh9Lfw7xY4c25VGsTXwSD737WkQ"
+      formData.append('metadata', JSON.stringify({
+        amount: data.amount,
+        type: data.type,
+        status: data.status,
+        date: data.date,
+        description: data.description
+      }));
+
       const response = await fetch('http://localhost:3000/bills', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
         },
         body: formData
-      })
-      const billData = await response.json()
+      });
+      const billData = await response.json();
       onSave(billData);
       onClose();
     } catch (error) {
-      console.error('Error saving bill:', error)
+      console.error('Error saving bill:', error);
+      setErrors(prev => ({ ...prev, submit: 'Erreur lors de l\'enregistrement' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -120,161 +148,161 @@ const CreationModal = ({ isOpen, onClose, onSave }) => {
     }
   };
 
-
-
   return (
-    <div style={{
-      position: "fixed",
-      top: 0, left: 0, right: 0, bottom: 0,
-      background: "rgba(0,0,0,0.2)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      zIndex: 1000
-    }}>
-      <div style={{
-        background: "#f3eefb",
-        borderRadius: 12,
-        padding: 24,
-        minWidth: 320,
-        boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
-        position: "relative",
-        border: "2px solid #6c47b6"
-      }}>
+    <div
+      ref={ref}
+      className="modal">
+      <button
+        onClick={onClose}
+        className="close-button"
+      >
+        x
+      </button>
+      <div className="modal-right">
+        <div
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          <div className="flex flex-col text-sm text-gray-600">
+            <label
+              htmlFor="file-upload"
+              className="cursor-pointer text-blue-600 hover:underline"
+            >
+              Upload a file
+            </label>
+            <input
+              id="file-upload"
+              name="file-upload"
+              type="file"
+              className=""
+              onChange={handleChange}
+              ref={fileInputRef}
+              accept="image/*,.pdf"
+            />
+            <p className="pl-1">or drag and drop</p>
+          </div>
+          <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
+          {errors.proof && <p className="text-red-500 text-sm">{errors.proof}</p>}
+          {data.proof && (
+            <p className="text-sm text-blue-600 mt-2">
+              {data.proof.name}
+            </p>
+          )}
+        </div>
+
         <button
-          onClick={onClose}
+          type="submit"
+          disabled={isSubmitting}
           style={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            background: "none",
+            marginTop: 16,
+            background: "#8e44ad",
+            color: "white",
             border: "none",
-            fontSize: 22,
-            color: "#8e44ad",
-            cursor: "pointer"
+            borderRadius: 8,
+            padding: "8px 0",
+            fontWeight: "bold",
+            fontSize: 16,
+            cursor: "pointer",
+            opacity: isSubmitting ? 0.7 : 1,
+            width: "100%",
           }}
         >
-          ×
+          {isSubmitting ? 'Enregistrement...' : 'Ajouter le justificatif'}
         </button>
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginBottom: 16
-        }}>
-          <div style={{
-            width: 80,
-            height: 80,
-            background: "#d8d8d8",
-            borderRadius: 8,
-            border: "8px solid #a084ca",
-            marginBottom: 12
-          }} />
-        </div>
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-            Montant :
-            <input
-              name="amount"
-              type="number"
-              value={data.amount}
-              onChange={handleChange}
-              style={{ border: "none", borderBottom: "2px solid #6c47b6", background: "transparent", outline: "none", marginTop: 2 }}
-              required
-            />
-          </label>
-          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-            Date :
-            <input
-              name="date"
-              type="date"
-              value={data.date}
-              onChange={handleChange}
-              style={{ border: "none", borderBottom: "2px solid #6c47b6", background: "transparent", outline: "none", marginTop: 2 }}
-              required
-            />
-          </label>
-          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-            Description :
-            <textarea
-              name="description"
-              value={data.description}
-              onChange={handleChange}
-              style={{ border: "2px solid #6c47b6", borderRadius: 4, background: "transparent", outline: "none", marginTop: 2, resize: "none" }}
-              rows={2}
-              required
-            />
-          </label>
-
-          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-            Type :
-            <input
-              name="type"
-              type="text"
-              value={data.type}
-              onChange={handleChange}
-              style={{ border: "none", borderBottom: "2px solid #6c47b6", background: "transparent", outline: "none", marginTop: 2 }}
-              required
-            />
-          </label>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Receipt
-            </label>
-            <div
-              className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6"
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-            >
-              <div className="space-y-1 text-center">
-
-                <div className="flex text-sm text-gray-600">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500"
-                  >
-                    <span>Upload a file</span>
-                    <input
-                      id="file-upload"
-                      name="file-upload"
-                      type="file"
-                      className="sr-only"
-                      onChange={handleChange}
-                      ref={fileInputRef}
-                      accept="image/*,.pdf"
-                    />
-                  </label>
-                  <p className="pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
-
-                {data.receipt && (
-                  <p className="text-sm text-blue-600 mt-2">
-                    {data.receipt.name}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-          <button type="submit"
-            disabled={isSubmitting}
-            style={{
-              marginTop: 16,
-              background: "#8e44ad",  
-              color: "white",
-              border: "none",
-              borderRadius: 8,
-              padding: "8px 0",
-              fontWeight: "bold",
-              fontSize: 16,
-              cursor: "pointer"
-            }}>
-             {isSubmitting ? 'Enregistrement...' : 'Ajouter la facture'}
-          </button>
-        </form>
       </div>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
+          Date :
+          <input
+            name="date"
+            type="date"
+            value={data.date}
+            onChange={handleChange}
+            style={{
+              border: errors.date ? "1px solid red" : "none",
+              borderBottom: "2px solid #6c47b6",
+              background: "transparent",
+              outline: "none",
+              marginTop: 2,
+              color: "#000000"
+            }}
+            required
+          />
+          {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
+        </label>
+
+        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
+          Type :
+          <select
+            name="type"
+            value={data.type}
+            onChange={handleChange}
+            style={{
+              border: errors.type ? "1px solid red" : "none",
+              borderBottom: "2px solid #6c47b6",
+              background: "transparent",
+              outline: "none",
+              marginTop: 2,
+              color: "#000000"
+            }}
+            required
+          >
+            <option value="">Sélectionnez un type</option>
+            <option value="Transport">Transport</option>
+            <option value="Restauration">Restauration</option>
+            <option value="Hôtel">Hôtel</option>
+            <option value="Matériel">Matériel</option>
+            <option value="Carburant">Carburant</option>
+            <option value="Péage">Péage</option>
+            <option value="Autre">Autre</option>
+          </select>
+          {errors.type && <span className="text-red-500 text-sm">{errors.type}</span>}
+        </label>
+
+        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
+          Description :
+          <textarea
+            name="description"
+            value={data.description}
+            onChange={handleChange}
+            style={{
+              border: errors.description ? "2px solid red" : "2px solid #6c47b6",
+              borderRadius: 4,
+              background: "transparent",
+              outline: "none",
+              marginTop: 2,
+              resize: "none"
+            }}
+            rows={2}
+            required
+          />
+          {errors.description && <span className="text-red-500 text-sm">{errors.description}</span>}
+        </label>
+
+        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
+          Montant :
+          <input
+            name="amount"
+            type="number"
+            value={data.amount}
+            onChange={handleChange}
+            style={{
+              border: errors.amount ? "1px solid red" : "none",
+              borderBottom: "2px solid #6c47b6",
+              background: "transparent",
+              outline: "none",
+              marginTop: 2
+            }}
+            required
+          />
+          {errors.amount && <span className="text-red-500 text-sm">{errors.amount}</span>}
+        </label>
+
+        {errors.submit && <p className="text-red-500 text-sm">{errors.submit}</p>}
+
+      </form>
     </div>
   );
-};
+});
 
 export default CreationModal;
