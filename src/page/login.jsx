@@ -59,7 +59,6 @@ function Login({ onLogin }) {
           email: formData.email,
           password: formData.password
         }),
-    credentials: 'include'
       });
 
       console.log('Statut de la réponse:', response.status);
