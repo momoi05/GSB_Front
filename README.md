@@ -18,7 +18,7 @@ Installer les dépendances :
 npm install
 Lancer l'application en mode développement :
 npm run dev
-L'application sera accessible à l'adresse : https://gsbfront.vercel.app/
+L'application sera accessible à l'adresse : https://gsb-front-mauve.vercel.app
 
 Installation avec Docker
 Construire et lancer avec Docker Compose (recommandé pour le développement) :
