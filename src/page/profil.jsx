@@ -36,7 +36,7 @@ const Profil = () => {
 
     (async () => {
       try {
-        const response = await fetch(`http://localhost:3000/user?email=${userEmail}`,
+        const response = await fetch(`https://gsb-back.onrender.com/user?email=${userEmail}`,
           {
             method: 'GET',
             headers: {
@@ -68,7 +68,7 @@ const Profil = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/user?email=${userEmail}`, {
+      const response = await fetch(`https://gsb-back.onrender.com/user?email=${userEmail}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

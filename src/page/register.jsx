@@ -48,7 +48,7 @@ const Register = () => {
         password: '***'
       });
 
-      const response = await fetch('http://localhost:3000/user', {
+      const response = await fetch('https://gsb-back.onrender.com/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

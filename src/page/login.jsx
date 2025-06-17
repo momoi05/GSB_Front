@@ -50,7 +50,7 @@ function Login({ onLogin }) {
     try {
       console.log('Tentative de connexion avec:', { email: formData.email });
 
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch('https://gsb-back.onrender.com/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,6 +59,7 @@ function Login({ onLogin }) {
           email: formData.email,
           password: formData.password
         }),
+    credentials: 'include'
       });
 
       console.log('Statut de la réponse:', response.status);

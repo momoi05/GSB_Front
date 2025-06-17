@@ -42,7 +42,7 @@ const Dashboard = () => {
     }
     (async () => {
       try {
-        const response = await fetch("http://localhost:3000/bills", {
+        const response = await fetch("https://gsb-back.onrender.com/bills", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const Dashboard = () => {
 
     (async () => {
       try {
-        const response = await fetch("http://localhost:3000/user", {
+        const response = await fetch("https://gsb-back.onrender.com/user", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const Dashboard = () => {
   const handleDeleteUser = async (email) => {
     try {
       console.log("Deleting user with email:", email);
-      const response = await fetch(`http://localhost:3000/api/user?email=${email}`, {
+      const response = await fetch(`https://gsb-back.onrender.com/user?email=${email}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -173,7 +173,7 @@ const Dashboard = () => {
 
   const handleUpdateStatus = async (id, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:3000/bills/${id}`, {
+      const response = await fetch(`https://gsb-back.onrender.com/bills/${id}`, {
         method: "PUT", // ou PUT selon ton backend
         headers: {
           "Content-Type": "application/json",

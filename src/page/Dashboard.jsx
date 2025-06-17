@@ -33,7 +33,7 @@ const Dashboard = () => {
     }
     (async () => {
       try {
-        const response = await fetch("http://localhost:3000/bills", {
+        const response = await fetch("https://gsb-back.onrender.com/bills", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -113,7 +113,7 @@ const CreationModal = forwardRef(({ isOpen, onClose, onSave }, ref) => {
         description: data.description
       }));
 
-      const response = await fetch('http://localhost:3000/bills', {
+      const response = await fetch('https://gsb-back.onrender.com/bills', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
