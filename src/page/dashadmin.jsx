@@ -149,6 +149,14 @@ const Dashboard = () => {
     bill.date.includes(searchTerm)
   );
 
+  
+  const filteredUsers = users.filter((user) =>
+    user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.role?.toString().includes(searchTerm) ||
+    user.date?.includes(searchTerm)
+  );
+
   const typeCountMap = bills.reduce((acc, bill) => {
     acc[bill.type] = (acc[bill.type] || 0) + 1;
     return acc;
@@ -324,7 +332,7 @@ const Dashboard = () => {
             <>
 
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {users.map((user, i) => (
+                {filteredUsers.map((user, i) => (
                   <div
                     key={i}
                     className="bill-item"
