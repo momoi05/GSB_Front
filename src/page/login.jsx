@@ -180,8 +180,15 @@ function Login({ onLogin }) {
             required
           />
         </div>
-        <button onClick={handleSubmit} type="submit" className="button">
-          Se connecter
+        <button onClick={handleSubmit} type="submit" className="button" disabled={loading}>
+          {loading ? (
+            <>
+              <div className="spinner" style={{ display: "inline-block", marginRight: "8px" }}></div>
+              Connexion en cours...
+            </>
+          ) : (
+            "Se connecter"
+          )}
         </button>
       </form>
       <Link to="/register" style={{ textDecoration: "none" }}>

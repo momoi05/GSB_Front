@@ -158,148 +158,156 @@ const CreationModal = forwardRef(({ isOpen, onClose, onSave }, ref) => {
       >
         x
       </button>
-      <div className="modal-right">
-        <div
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-        >
-          <div className="flex flex-col text-sm text-gray-600">
-            <label
-              htmlFor="file-upload"
-              className="cursor-pointer text-blue-600 hover:underline"
-            >
-              Upload a file
-            </label>
-            <input
-              id="file-upload"
-              name="file-upload"
-              type="file"
-              className=""
-              onChange={handleChange}
-              ref={fileInputRef}
-              accept="image/*,.pdf"
-            />
-            <p className="pl-1">or drag and drop</p>
-          </div>
-          <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
-          {errors.proof && <p className="text-red-500 text-sm">{errors.proof}</p>}
-          {data.proof && (
-            <p className="text-sm text-blue-600 mt-2">
-              {data.proof.name}
-            </p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          style={{
-            marginTop: 16,
-            background: "#8e44ad",
-            color: "white",
-            border: "none",
-            borderRadius: 8,
-            padding: "8px 0",
-            fontWeight: "bold",
-            fontSize: 16,
-            cursor: "pointer",
-            opacity: isSubmitting ? 0.7 : 1,
-            width: "100%",
-          }}
-        >
-          {isSubmitting ? 'Enregistrement...' : 'Ajouter le justificatif'}
-        </button>
-      </div>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-          Date :
-          <input
-            name="date"
-            type="date"
-            value={data.date}
-            onChange={handleChange}
-            style={{
-              border: errors.date ? "1px solid red" : "none",
-              borderBottom: "2px solid #6c47b6",
-              background: "transparent",
-              outline: "none",
-              marginTop: 2,
-              color: "#000000"
-            }}
-            required
-          />
-          {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
-        </label>
-
-        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-          Type :
-          <select
-            name="type"
-            value={data.type}
-            onChange={handleChange}
-            style={{
-              border: errors.type ? "1px solid red" : "none",
-              borderBottom: "2px solid #6c47b6",
-              background: "transparent",
-              outline: "none",
-              marginTop: 2,
-              color: "#000000"
-            }}
-            required
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column-reverse", gap: 8 }}>
+        <div>
+          <div
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
           >
-            <option value="">Sélectionnez un type</option>
-            <option value="Transport">Transport</option>
-            <option value="Restauration">Restauration</option>
-            <option value="Hôtel">Hôtel</option>
-            <option value="Matériel">Matériel</option>
-            <option value="Carburant">Carburant</option>
-            <option value="Péage">Péage</option>
-            <option value="Autre">Autre</option>
-          </select>
-          {errors.type && <span className="text-red-500 text-sm">{errors.type}</span>}
-        </label>
+            <div className="flex flex-col text-sm text-gray-600">
+              <label
+                htmlFor="file-upload"
+                className="cursor-pointer text-blue-600 hover:underline"
+              >
+                Upload a file
+              </label>
+              <input
+                id="file-upload"
+                name="file-upload"
+                type="file"
+                className=""
+                onChange={handleChange}
+                ref={fileInputRef}
+                accept="image/*,.pdf"
+              />
+              <p className="pl-1">or drag and drop</p>
+            </div>
+            <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
+            {errors.proof && <p className="text-red-500 text-sm">{errors.proof}</p>}
+            {data.proof && (
+              <p className="text-sm text-blue-600 mt-2">
+                {data.proof.name}
+              </p>
+            )}
+          </div>
 
-        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-          Description :
-          <textarea
-            name="description"
-            value={data.description}
-            onChange={handleChange}
+          <button
+            type="submit"
+            disabled={isSubmitting}
             style={{
-              border: errors.description ? "2px solid red" : "2px solid #6c47b6",
-              borderRadius: 4,
-              background: "transparent",
-              outline: "none",
-              marginTop: 2,
-              resize: "none"
+              marginTop: 16,
+              background: "#8e44ad",
+              color: "white",
+              border: "none",
+              borderRadius: 8,
+              padding: "8px 0",
+              fontWeight: "bold",
+              fontSize: 16,
+              cursor: "pointer",
+              opacity: isSubmitting ? 0.7 : 1,
+              width: "100%",
             }}
-            rows={2}
-            required
-          />
-          {errors.description && <span className="text-red-500 text-sm">{errors.description}</span>}
-        </label>
+          >
+            {isSubmitting ? (
+              <>
+                <div className="spinner" style={{ display: "inline-block", marginRight: "8px" }}></div>
+                Ajout en cours...
+              </>
+            ) : (
+              "Ajouter le justicicatif"
+            )}
+          </button>
+        </div>
+        <div>
+          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold", marginBottom: 10 }}>
+            Date :
+            <input
+              name="date"
+              type="date"
+              value={data.date}
+              onChange={handleChange}
+              style={{
+                border: errors.date ? "1px solid red" : "none",
+                borderBottom: "2px solid #6c47b6",
+                background: "transparent",
+                outline: "none",
+                marginTop: 2,
+                color: "#000000"
+              }}
+              required
+            />
+            {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
+          </label>
 
-        <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
-          Montant :
-          <input
-            name="amount"
-            type="number"
-            value={data.amount}
-            onChange={handleChange}
-            style={{
-              border: errors.amount ? "1px solid red" : "none",
-              borderBottom: "2px solid #6c47b6",
-              background: "transparent",
-              outline: "none",
-              marginTop: 2
-            }}
-            required
-          />
-          {errors.amount && <span className="text-red-500 text-sm">{errors.amount}</span>}
-        </label>
+          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold",  marginBottom: 10}}>
+            Type :
+            <select
+              name="type"
+              value={data.type}
+              onChange={handleChange}
+              style={{
+                border: errors.type ? "1px solid red" : "none",
+                borderBottom: "2px solid #6c47b6",
+                background: "transparent",
+                outline: "none",
+                marginTop: 2,
+                color: "#000000"
+              }}
+              required
+            >
+              <option value="">Sélectionnez un type</option>
+              <option value="Transport">Transport</option>
+              <option value="Restauration">Restauration</option>
+              <option value="Hôtel">Hôtel</option>
+              <option value="Matériel">Matériel</option>
+              <option value="Carburant">Carburant</option>
+              <option value="Péage">Péage</option>
+              <option value="Autre">Autre</option>
+            </select>
+            {errors.type && <span className="text-red-500 text-sm">{errors.type}</span>}
+          </label>
 
-        {errors.submit && <p className="text-red-500 text-sm">{errors.submit}</p>}
+          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold", marginBottom: 10 }}>
+            Description :
+            <textarea
+              name="description"
+              value={data.description}
+              onChange={handleChange}
+              style={{
+                border: errors.description ? "2px solid red" : "2px solid #6c47b6",
+                borderRadius: 4,
+                background: "transparent",
+                outline: "none",
+                marginTop: 2,
+                resize: "none"
+              }}
+              rows={2}
+              required
+            />
+            {errors.description && <span className="text-red-500 text-sm">{errors.description}</span>}
+          </label>
 
+          <label style={{ display: "flex", flexDirection: "column", fontWeight: "bold" }}>
+            Montant :
+            <input
+              name="amount"
+              type="number"
+              value={data.amount}
+              onChange={handleChange}
+              style={{
+                border: errors.amount ? "1px solid red" : "none",
+                borderBottom: "2px solid #6c47b6",
+                background: "transparent",
+                outline: "none",
+                marginTop: 2
+              }}
+              required
+            />
+            {errors.amount && <span className="text-red-500 text-sm">{errors.amount}</span>}
+          </label>
+
+          {errors.submit && <p className="text-red-500 text-sm">{errors.submit}</p>}
+        </div>
       </form>
     </div>
   );

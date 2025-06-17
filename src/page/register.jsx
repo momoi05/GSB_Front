@@ -151,7 +151,14 @@ const Register = () => {
           />
         </div>
         <button type="submit" className="button" disabled={loading}>
-        {loading ? 'Création en cours...' : 'Créer le compte'}
+        {loading ? (
+            <>
+              <div className="spinner" style={{ display: "inline-block", marginRight: "8px" }}></div>
+              Création en cours...
+            </>
+          ) : (
+            "Créer le compte"
+          )}
         </button>
       </form>
       <Link to="/" style={{ textDecoration: "none" }}>
