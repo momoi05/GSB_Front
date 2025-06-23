@@ -179,7 +179,9 @@ function Login({ onLogin }) {
             onChange={handleChange}
             required
           />
-        </div>
+        </div><Link to="/forgot-password" style={{ textDecoration: "none" }}>
+        Mot de passe oublier
+      </Link>
         <button onClick={handleSubmit} type="submit" className="button" disabled={loading}>
           {loading ? (
             <>
