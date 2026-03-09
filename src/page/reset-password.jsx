@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
   const [token, setToken] = useState(''); // ici tu peux le récupérer par URL si tu veux
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const [message, setMessage] = useState('');
+  const [userId, setuserId] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+
+  const params = new URLSearchParams(window.location.search);
+  const tokenFromUrl = params.get('token');
+  const idFromUrl = params.get('id');
+
+  if (tokenFromUrl) setToken(tokenFromUrl);
+  if (idFromUrl) setuserId(idFromUrl);
+}, []);s
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,10 +27,11 @@ const ResetPassword = () => {
       return;
     }
 
-    const res = await fetch('http://localhost:3000/users/reset-password', {
+    const res = await fetch('http://localhost:3000/user/reset-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        userId,
         token,
         newPassword: password1
       })
@@ -25,6 +39,7 @@ const ResetPassword = () => {
 
     if (res.ok) {
       setMessage('Mot de passe réinitialisé avec succès.');
+      navigate('/');
     } else {
       setMessage('Erreur lors de la réinitialisation.');
     }
@@ -34,12 +49,21 @@ const ResetPassword = () => {
     <div>
       <h2>Réinitialiser le mot de passe</h2>
       <form onSubmit={handleSubmit}>
+      <input
+          type="text"
+          placeholder="userId"
+          value={userId}
+          onChange={(e) => setuserId(e.target.value)}
+          required
+          style={{ display: 'none' }}
+        />
         <input
           type="text"
           placeholder="Token"
           value={token}
           onChange={(e) => setToken(e.target.value)}
           required
+          style={{ display: 'none' }}
         />
         <input
           type="password"
@@ -55,7 +79,7 @@ const ResetPassword = () => {
           onChange={(e) => setPassword2(e.target.value)}
           required
         />
-        <button type="submit">Envoyer</button>
+        <button onClick={handleSubmit} type="submit">Envoyer</button>
       </form>
       <p>{message}</p>
     </div>

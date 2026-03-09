@@ -6,6 +6,7 @@ import Dashboard from './page/Dashboard';
 import Profil from './page/profil';
 import Dashadmin from './page/dashadmin';
 import Forgot from './page/forgot-password';
+import Reset from './page/reset-password';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/profil" element={<Profil />} />
         <Route path="/dashadmin" element={<Dashadmin />} />
         <Route path="/forgot-password" element={<Forgot />} />
+        <Route path="/reset-password" element={<Reset />} />
 
       </Routes>
     </BrowserRouter>

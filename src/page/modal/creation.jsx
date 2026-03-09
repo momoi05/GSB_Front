@@ -113,7 +113,9 @@ const CreationModal = forwardRef(({ isOpen, onClose, onSave }, ref) => {
         description: data.description
       }));
 
-      const response = await fetch('https://gsb-back.onrender.com/bills', {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gsb-back.onrender.com';
+
+      const response = await fetch(`${API_BASE_URL}/bills`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

@@ -42,7 +42,9 @@ const Dashboard = () => {
     }
     (async () => {
       try {
-        const response = await fetch("https://gsb-back.onrender.com/bills", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gsb-back.onrender.com";
+
+      const response = await fetch(`${API_BASE_URL}/bills`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +61,9 @@ const Dashboard = () => {
 
     (async () => {
       try {
-        const response = await fetch("https://gsb-back.onrender.com/user", {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gsb-back.onrender.com";
+
+      const response = await fetch(`${API_BASE_URL}/user`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -119,7 +123,9 @@ const Dashboard = () => {
   const handleDeleteUser = async (email) => {
     try {
       console.log("Deleting user with email:", email);
-      const response = await fetch(`https://gsb-back.onrender.com/user?email=${email}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gsb-back.onrender.com";
+
+      const response = await fetch(`${API_BASE_URL}/user?email=${email}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -181,7 +187,9 @@ const Dashboard = () => {
 
   const handleUpdateStatus = async (id, newStatus) => {
     try {
-      const response = await fetch(`https://gsb-back.onrender.com/bills/${id}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://gsb-back.onrender.com";
+
+      const response = await fetch(`${API_BASE_URL}/bills/${id}`, {
         method: "PUT", // ou PUT selon ton backend
         headers: {
           "Content-Type": "application/json",

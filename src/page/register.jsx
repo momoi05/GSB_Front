@@ -48,7 +48,10 @@ const Register = () => {
         password: '***'
       });
 
-      const response = await fetch('https://gsb-back.onrender.com/user', {
+      // URL de base du backend via variable d'environnement Vite
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gsb-back.onrender.com';
+
+      const response = await fetch(`${API_BASE_URL}/user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

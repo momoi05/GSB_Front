@@ -36,7 +36,9 @@ const Profil = () => {
 
     (async () => {
       try {
-        const response = await fetch(`https://gsb-back.onrender.com/user?email=${userEmail}`,
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gsb-back.onrender.com';
+
+      const response = await fetch(`${API_BASE_URL}/user?email=${userEmail}`,
           {
             method: 'GET',
             headers: {
@@ -68,7 +70,9 @@ const Profil = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`https://gsb-back.onrender.com/user?email=${userEmail}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gsb-back.onrender.com';
+
+      const response = await fetch(`${API_BASE_URL}/user?email=${userEmail}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
