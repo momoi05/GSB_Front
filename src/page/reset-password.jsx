@@ -17,7 +17,7 @@ const ResetPassword = () => {
 
   if (tokenFromUrl) setToken(tokenFromUrl);
   if (idFromUrl) setuserId(idFromUrl);
-}, []);s
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,8 +26,10 @@ const ResetPassword = () => {
       setMessage('Les mots de passe ne correspondent pas.');
       return;
     }
+     // URL de base du backend via variable d'environnement Vite
+     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gsb-back.onrender.com';
 
-    const res = await fetch('http://localhost:3000/user/reset-password', {
+     const res = await fetch(`${API_BASE_URL}/user/reset-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
