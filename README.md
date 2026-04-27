@@ -1,48 +1,131 @@
-Application frontend React/Vite pour le projet GSB.
+# GSB Frontend
 
-Le principe de l'application GSB:
-GSB est une application de gestion de note de frais. Elle doit permettre au utilisateur d'ajouter des notes de frais et de consulter celle déjà ajouter. Elle doit également permettre a un administrateur de valider ou non les notes de frais des utilisateurs
+Frontend React/Vite de l’application GSB (Gestion des Notes de Frais).
 
-Ce frontend comprends 5 page : une page de login pour se connecté a l'application, une page d'inscription pour s'inscrire sur l'application, une page Dashboard pour voir, en tant qu'utilisateur lambda, nos notes de frais et en ajouter, une page profil pour pouvoir consulter notre profil et faire des modifications si besoin. Et une page dashadmin qui permet a un utilisateur admin de consulter toute els note de frais et de les validées ou refusées et lui permet également de voir tout les utilisateur et leur profil. 
+## 📌 Présentation
 
-Prérequis
-Node.js (version 20 ou supérieure)
-npm (généralement installé avec Node.js)
-Docker (optionnel, pour la conteneurisation)
-Installation
-Installation locale
-Cloner le repository :
-git clone <url-du-repo>
-cd gsb_front
-Installer les dépendances :
-npm install
-Lancer l'application en mode développement :
-npm run dev
-L'application sera accessible à l'adresse : https://gsb-front-mauve.vercel.app
+GSB permet :
 
-Installation avec Docker
-Construire et lancer avec Docker Compose (recommandé pour le développement) :
-docker compose up
-Ou construire l'image Docker manuellement :
-sudo docker build -t gsb-front .
-Lancer le conteneur :
-sudo docker run -p 5173:5173 gsb-frontend
-Note : L'utilisation de Docker Compose est recommandée car elle configure automatiquement :
+- aux utilisateurs :
+  - se connecter / créer un compte
+  - créer des notes de frais
+  - consulter leurs remboursements
+  - modifier leur profil
 
-Le hot-reload avec nodemon
-Les volumes pour le développement
-Les variables d'environnement nécessaires
-Scripts disponibles
-npm run dev : Lance le serveur de développement
-npm run build : Compile l'application pour la production
-npm run preview : Prévisualise la version de production localement
-npm run lint : Exécute le linter pour vérifier le code
-Structure du projet
+- aux administrateurs :
+  - consulter toutes les notes de frais
+  - valider ou refuser des notes
+  - consulter les utilisateurs
+
+## 🚀 Stack technique
+
+- React 19
+- Vite
+- React Router
+- Recharts
+- Docker
+
+## 🌐 Démo en ligne
+
+Application déployée :
+
+https://gsb-front-mauve.vercel.app
+
+## 🔗 Dépôts liés
+
+Backend API :
+
+https://github.com/momoi05/GSB_Back
+
+## 🧪 Comptes de démonstration (jury)
+
+### Utilisateur standard
+
+Email :
+briane@gmail.com
+
+Mot de passe :
+Utilisateur05!v
+
+---
+
+### Administrateur
+
+Email :
+admin@gmail.com
+
+Mot de passe :
+MonG$b2026
+
+---
+
+Ces comptes sont présents sur l’environnement de démonstration.
+
+## 📁 Structure
+
+```bash
 gsb-front/
-├── src/              # Code source de l'application
-├── public/           # Fichiers statiques
-├── node_modules/     # Dépendances (généré automatiquement)
-├── package.json      # Configuration du projet et dépendances
-├── vite.config.js    # Configuration de Vite
-├── eslint.config.js  # Configuration d'ESLint
-└── dockerfile        # Configuration Docker
+├── src/
+├── public/
+├── package.json
+├── vite.config.js
+├── eslint.config.js
+├── Dockerfile
+└── .env.example
+```
+
+## ⚙️ Installation locale
+
+### Prérequis
+
+- Node.js >=20
+- npm >=10
+
+### Installation
+
+```bash
+git clone https://github.com/momoi05/GSB_Front.git
+cd GSB_Front
+
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Application disponible sur :
+
+```bash
+http://localhost:5173
+```
+
+## 📜 Scripts disponibles
+
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+```
+
+## 📦 Fonctionnalités
+
+- Authentification JWT
+- Dashboard utilisateur
+- Dashboard administrateur
+- Gestion profil
+- Gestion notes de frais
+- Validation / refus admin
+
+## 🤝 Contribution
+
+```bash
+git checkout -b feature/nom-feature
+git commit -m "Ajout fonctionnalité"
+git push origin feature/nom-feature
+```
+
+Puis ouvrir une Pull Request.
+
+## 👤 Auteur
+
+Projet réalisé par Tessa Taraschini
