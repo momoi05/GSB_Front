@@ -94,35 +94,18 @@ const Profil = () => {
   };
 
   if (!user) {
-    return <div>Chargement du profil...</div>;
+    return <div className="page-profil">Chargement du profil...</div>;
   }
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: "20px",
-      padding: "20px"
-    }}>
+    <div className="page-profil">
       <button
+        className="btn-retour-profil"
         onClick={() => {
           if (user && user.role === "admin") {
             navigate("/dashadmin");
           } else {
             navigate("/dashboard");
           }
-        }}
-        style={{
-          alignSelf: "flex-start",
-          padding: "8px 16px",
-          backgroundColor: "#a084ca",
-          color: "#fff",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px"
         }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

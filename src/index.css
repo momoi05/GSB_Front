@@ -111,6 +111,43 @@ textarea:focus {
   align-items: center;
 }
 
+.page-profil {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.btn-retour-profil {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background-color: #a084ca;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-profil {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(160, 132, 202, 0.2);
+  padding: 32px;
+  min-width: 320px;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Dashboard.css */
 
 .dashboard-container {
@@ -537,18 +574,6 @@ textarea:focus {
   .dropdown-menu {
     right: 0;
     top: 45px;
-  }
-
-  .card-profil {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(160, 132, 202, 0.2);
-    padding: 32px;
-    min-width: 320px;
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: center
   }
 
   @media (max-width: 600px) {
